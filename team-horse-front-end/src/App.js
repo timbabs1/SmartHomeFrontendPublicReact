@@ -6,6 +6,7 @@ import Header from './components/header/header';
 import Nav from './components/menu/menu';
 import LightSwitch from './components/lightswitch/switch';
 import Tempbutton from './components/tempbutton/tempbutton';
+import Displaytemp from './components/displaytemp/displaytemp'
 
 class App extends React.Component {
 
@@ -30,6 +31,7 @@ class App extends React.Component {
     if(this.state.currentMenuItem === "mail"){
       whatToRender = 
       <div>
+        <Displaytemp />
         <Tempbutton />
       </div>
     }

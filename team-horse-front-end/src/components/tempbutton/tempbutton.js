@@ -1,4 +1,7 @@
+import React from 'react';
+
 import { Button } from 'antd';
+
 class Tempbutton extends React.Component {
     constructor(props){
         super(props);
@@ -20,4 +23,4 @@ class Tempbutton extends React.Component {
   }
 
 }
-export default LightSwitch
+export default Tempbutton

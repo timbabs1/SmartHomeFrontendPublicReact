@@ -9,11 +9,19 @@ class Nav extends React.Component {
     current: 'mail',
   };
 
+  handleChange() {
+  }
+
   handleClick = e => {
     console.log('click ', e);
     this.setState({
       current: e.key,
     });
+    this.props.changeView({
+      currentMenu: this.state.current,
+    })
+    console.log(this.state.current)
+
   };
 
   render() {

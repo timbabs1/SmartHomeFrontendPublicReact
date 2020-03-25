@@ -34,9 +34,9 @@ class LightSwitch extends React.Component {
         disabled: !this.state.disabled,
       });
       if (this.state.disabled === false){
-        this.setState({text: "Enable Edit Mode"}) 
+        this.setState({text: "Enable Edit Mode", count: 0}) 
     } else {
-      this.setState({text: "Disable Edit Mode"})
+      this.setState({text: "Disable Edit Mode", count: 1})
     }
     };
 

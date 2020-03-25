@@ -21,6 +21,7 @@ class LightSwitch extends React.Component {
     handleOpen()  {
       alert("connected:)");
     }
+
     handleClose() {
       alert("disconnected:(");
     }
@@ -47,8 +48,8 @@ class LightSwitch extends React.Component {
           this.setState({switch_digit: 1})
         }
         const message = {
-          Light_status : 0,
-          Room : "bedroom 1"
+          Light_status : this.state.switch_digit,
+          Room : "Bedroom"
         }
       this.sendMessage(JSON.stringify(message))
     }

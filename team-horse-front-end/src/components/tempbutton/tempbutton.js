@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button } from 'antd';
+import { Button, Row, Col, Card } from 'antd';
 
 class Tempbutton extends React.Component {
     constructor(props){
@@ -16,8 +16,18 @@ class Tempbutton extends React.Component {
   render() {
     return (
         <div>
-        <Button type="primary">Day</Button>
-        <Button type="primary">Night</Button>
+          <Row gutter={8}>
+                    <Col span={6}>
+                        <Card>
+                          <Button type="primary">Day</Button>
+                        </Card>
+                    </Col>
+                    <Col span={6}>
+                      <Card>
+                        <Button type="default">Night</Button>
+                      </Card>
+                    </Col>
+          </Row>
         </div>
     )
   }

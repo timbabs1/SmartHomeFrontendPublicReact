@@ -101,7 +101,7 @@ class Alarm extends React.Component {
                             <p className="ant-statistic-title">Switch toggle to trigger alarm manually or deactivate manually</p>
                             <Switch  onChange={this.onChange4} checkedChildren="On" unCheckedChildren="Off" disabled={this.state.disabled} />
                             <Statistic title = "Current Alarm Silent Mode State" value={this.state.withsilent} valueStyle={{ color: this.state.silenttriggeredcolour }} prefix={<FontAwesomeIcon icon={faBell} />} />
-                            <p className="ant-statistic-title">Set alarm silent mode state (On to activate silent mode) </p>
+                            <p className="ant-statistic-title">Set alarm silent mode state (On to activate silent mode) (To trigger alarm in silent mode, activate switch and trigger alarm on manually or via timer) </p>
                             <Switch  onChange={this.onChange6} checkedChildren="On" unCheckedChildren="Off" disabled={this.state.disabled} />
                         </Card>
                     </Col>
@@ -137,17 +137,17 @@ class Alarm extends React.Component {
             </Row>
             <Row gutter={8}>
                 <Tabs defaultActiveKey="1" onChange={this.callback} activeKey= {this.state.activeKey}>
-                    <TabPane tab={<span><Badge dot = {this.state.show}><NotificationOutlined /></Badge> Tab 1</span>} key="1">
+                    <TabPane tab={<span><Badge dot = {this.state.show}><NotificationOutlined /></Badge> Alarm Deactivated</span>} key="1">
                     <div className = "slide1">
                     <h3 className="ant-statistic-title">Alarm Deactivated</h3>
                     </div>
                     </TabPane>
-                    <TabPane tab={<span><Badge dot = {this.state.show}><NotificationOutlined /></Badge> Tab 2</span>} key="2">
+                    <TabPane tab={<span><Badge dot = {this.state.show}><NotificationOutlined /></Badge> Alarm Activated</span>} key="2">
                     <div className = "slide2">
                     <h3 className="ant-statistic-title">Alarm Triggered!(Silent mode)</h3>
                     </div>
                     </TabPane>
-                    <TabPane tab={<span><Badge dot = {this.state.show}><NotificationOutlined /></Badge> Tab 3</span>} key="3">
+                    <TabPane tab={<span><Badge dot = {this.state.show}><NotificationOutlined /></Badge> Alarm Activated(Non-silent mode)</span>} key="3">
                     <div className = "slide3">
                     <h3 className="ant-statistic-title">Alarm Triggered!(Non Silent mode)</h3>
                     </div>

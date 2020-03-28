@@ -32,12 +32,8 @@ class App extends React.Component {
       whatToRender = 
       <div>
         <div style={{ background: '#ECECEC', padding: '30px' }}>
-          <LightSwitch /> <br/>
-          <Card title="Light Configuration" bordered={false} style={{ width: 320 }}>
-          <p>Brightness Level</p>
-          <p>Dim Level</p>
-          <p>Wattage</p>
-          </Card>
+          <LightSwitch /> 
+          <br/>
         </div>
       </div>
     }

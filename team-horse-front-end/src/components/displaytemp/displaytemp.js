@@ -24,13 +24,13 @@ class Displaytemp extends React.Component {
                 <Row gutter={8}>
                     <Col span={6}>
                         <Card>
-                            <Statistic title = "Current Temperature" value={"28°"} valueStyle={{ color: '#3f8600' }} prefix={<FontAwesomeIcon icon={faThermometer} />} />
+                            <Statistic title = "Current Temperature" value={"28°C"} valueStyle={{ color: '#3f8600' }} prefix={<FontAwesomeIcon icon={faThermometer} />} />
                         </Card>
                     </Col>
                     <Col span={6}>
                         <Card>
-                            <Statistic title = "Target Temperature" value={"30°"} valueStyle={{ color: '#3f8600' }} prefix={<FontAwesomeIcon icon={faThermometer} />} />
-                            <p className="ant-statistic-title">Input new target temperature below in degree celsius (°)</p>
+                            <Statistic title = "Target Temperature" value={"30°C"} valueStyle={{ color: '#3f8600' }} prefix={<FontAwesomeIcon icon={faThermometer} />} />
+                            <p className="ant-statistic-title">Input new target temperature below in degree celsius (°C)</p>
                             <InputNumber min={-40} max={50} defaultValue={3} /* onChange={onChange} */ />
                         </Card>
                     </Col>

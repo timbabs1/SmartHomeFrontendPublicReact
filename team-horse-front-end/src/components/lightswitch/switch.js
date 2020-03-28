@@ -22,11 +22,11 @@ class LightSwitch extends React.Component {
   }
 
   handleOpen() {
-    alert("connected:)");
+    console.log("Connected")
   }
 
   handleClose() {
-    alert("disconnected:(");
+    console.log("disconnected")
   }
 
   sendMessage(message) {

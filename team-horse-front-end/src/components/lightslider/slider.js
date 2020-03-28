@@ -3,18 +3,12 @@ import React from 'react';
 import { Slider, Row, Col } from 'antd';
 
 class SliderComponent extends React.Component {
-  state = {
-    inputValue: 1,
-  };
-
+  
   onChange = value => {
-    this.setState({
-      inputValue: value,
-    });
+    this.props.sliderHandler(value)
   };
 
   render() {
-    const { inputValue } = this.state;
 
     return (
       <Row>
@@ -25,8 +19,6 @@ class SliderComponent extends React.Component {
             min={1}
             max={10}
             onChange={this.onChange}
-            onAfterChange={() => this.props.sliderHandler(this.state.inputValue)}
-            value={typeof inputValue === 'number' ? inputValue : 0}
           />
         </Col>
       </Row>

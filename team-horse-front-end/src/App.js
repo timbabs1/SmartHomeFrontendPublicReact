@@ -5,14 +5,15 @@ import { Card } from 'antd';
 import Header from './components/header/header';
 import Nav from './components/menu/menu';
 import LightSwitch from './components/lightswitch/switch';
-import Tempbutton from './components/tempbutton/tempbutton';
+import Displaytemp from './components/displaytemp/displaytemp'
+import Alarm from './components/alarm/alarm'
 
 class App extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      currentMenuItem: ''
+      currentMenuItem: "lights"
     };
   }
 
@@ -27,23 +28,31 @@ class App extends React.Component {
 
     let whatToRender
 
-    if(this.state.currentMenuItem === "mail"){
+    if(this.state.currentMenuItem === "lights"){
       whatToRender = 
       <div>
-        <Tempbutton />
+        <div style={{ background: '#ECECEC', padding: '30px' }}>
+          <LightSwitch /> <br/>
+          <Card title="Light Configuration" bordered={false} style={{ width: 320 }}>
+          <p>Brightness Level</p>
+          <p>Dim Level</p>
+          <p>Wattage</p>
+          </Card>
+        </div>
       </div>
     }
-    else if(this.state.currentMenuItem === "app") {
+    else if(this.state.currentMenuItem === "temperature") {
       whatToRender =
       <div>
-        <div style={{ background: '#ECECEC', padding: '30px' }}>
-        <LightSwitch /> <br/>
-        <Card title="Light Configuration" bordered={false} style={{ width: 320 }}>
-        <p>Brightness Level</p>
-        <p>Dim Level</p>
-        <p>Wattage</p>
-        </Card>
+        <div>
+          <Displaytemp />
         </div> 
+      </div>
+    }
+    else if(this.state.currentMenuItem === "alarm") {
+      whatToRender =
+      <div>
+        <Alarm />
       </div>
     }
   return (

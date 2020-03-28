@@ -12,8 +12,7 @@ class LightSwitch extends React.Component {
       disabled: true,
       text: 'Enable Edit Mode',
       count: 0,
-      switch_digit: 1,
-      slider_value: 5,
+      switch_digit: 1
     }
   }
 
@@ -35,11 +34,9 @@ class LightSwitch extends React.Component {
   }
 
   handleSlider = (incValue) => {
-    if (this.state.slider_value !== incValue) {
-      this.setState({ slider_value: incValue })
-    }
+  
     const message = {
-      Slider: this.state.slider_value,
+      LightSetting: incValue,
       Room: "Bedroom"
     }
     this.sendMessage(JSON.stringify(message)) //Sends the message when a change occurs.

@@ -63,29 +63,29 @@ class LightSwitch extends React.Component {
     this.sendMessage(JSON.stringify(message)) //Sends the message when a change occurs.
   }
 
-toggle = (message) => {
-  this.setState({
-    disabled: !this.state.disabled,
-  });
-  if (this.state.disabled === false) {
-    this.setState({ text: "Enable Edit Mode", count: 0 })
-  } else {
-    this.setState({ text: "Disable Edit Mode", count: 1 })
-  }
-};
+  toggle = (message) => {
+    this.setState({
+      disabled: !this.state.disabled,
+    });
+    if (this.state.disabled === false) {
+      this.setState({ text: "Enable Edit Mode", count: 0 })
+    } else {
+      this.setState({ text: "Disable Edit Mode", count: 1 })
+    }
+  };
 
-onChange = () => {
-  if (this.state.switch_digit === 1) {
-    this.setState({ switch_digit: 0 })
-  } else {
-    this.setState({ switch_digit: 1 })
+  onChange = () => {
+    if (this.state.switch_digit === 1) {
+      this.setState({ switch_digit: 0 })
+    } else {
+      this.setState({ switch_digit: 1 })
+    }
+    const message = {
+      Light_status: this.state.switch_digit,
+      Room: "Bedroom"
+    }
+    this.sendMessage(JSON.stringify(message)) //Sends the message when a change occurs.
   }
-  const message = {
-    Light_status: this.state.switch_digit,
-    Room: "Bedroom"
-  }
-  this.sendMessage(JSON.stringify(message)) //Sends the message when a change occurs.
-}
 
 
 render() {
@@ -115,10 +115,10 @@ render() {
           this.refWebSocket = Websocket;
         }} />
 
-    </div>
+      </div>
 
-  )
-}
+    )
+  }
 
 }
 export default LightSwitch

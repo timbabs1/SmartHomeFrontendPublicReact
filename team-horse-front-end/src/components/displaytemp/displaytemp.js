@@ -113,7 +113,7 @@ class Displaytemp extends React.Component {
                         <Card>
                             <Statistic title="Target Temperature" value={this.state.targetTemperatureKitchen} valueStyle={{ color: '#3f8600' }} prefix={<FontAwesomeIcon icon={faThermometer} />} />
                             <p className="ant-statistic-title">Input new target temperature below in degree celsius (°)</p>
-                            <InputNumber id="Kitchen" min={-40} max={50} defaultValue={this.state.targetTemperatureKitchen} /*onChange={this.onChange("Kitchen")}*/ />
+                            <InputNumber id="Kitchen" min={-40} max={50} defaultValue={this.state.targetTemperatureKitchen} onPressEnter={this.onChange("Kitchen")} />
                         </Card>
                         <Card>
                             <p className="ant-statistic-title">Select day and night temperature setting below</p>
@@ -131,7 +131,7 @@ class Displaytemp extends React.Component {
                         <Card>
                             <Statistic title="Target Temperature" value={this.state.targetTemperatureBathroom} valueStyle={{ color: '#3f8600' }} prefix={<FontAwesomeIcon icon={faThermometer} />} />
                             <p className="ant-statistic-title">Input new target temperature below in degree celsius (°)</p>
-                            <InputNumber id="Bathroom" min={-40} max={50} defaultValue={this.state.targetTemperatureBathroom} /*onChange={this.onChange("Bathroom")}*/ />
+                            <InputNumber id="Bathroom" min={-40} max={50} defaultValue={this.state.targetTemperatureBathroom} onPressEnter={this.onChange("Bathroom")} />
                         </Card>
                         <Card>
                             <p className="ant-statistic-title">Select day and night temperature setting below</p>

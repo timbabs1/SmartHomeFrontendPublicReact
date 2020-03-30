@@ -44,12 +44,6 @@ class Nav extends React.Component {
         <WarningOutlined />
           Alarm
         </Menu.Item>
-        <Menu.Item key="alipay">
-          <a href="https://ant.design" target="_blank" rel="noopener noreferrer">
-          <Icon type="windows" />
-            Windows
-          </a>
-        </Menu.Item>
       </Menu>
     );
   }

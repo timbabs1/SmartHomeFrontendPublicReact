@@ -1,11 +1,19 @@
 
 import React from 'react';
-import { Slider, Row, Col } from 'antd';
+import { Slider, Row, Col, Select } from 'antd';
+const { Option } = Select;
 
 class SliderComponent extends React.Component {
-  
-  onChange = value => {
-    this.props.sliderHandler(value)
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      roomName: 'Bedroom'
+    }
+  }
+
+  onChange = (value) => {
+    this.props.sliderHandler(value, this.state.roomName)
   };
 
   render() {
@@ -13,11 +21,17 @@ class SliderComponent extends React.Component {
     return (
       <Row>
         <Col span={12}>
-        <br></br>
-        <h1>Brightness slider for auto lights</h1>
+          <br></br>
+          <h1>Brightness slider for auto lights</h1>
+          <Select defaultValue="Bedroom" style={{ width: 120 }} onSelect={(value) => this.setState({roomName : value})}>
+            <Option value="Bedroom">Bedroom</Option>
+            <Option value="Kitchen">Kitchen</Option>
+            <Option value="Bathroom">Bathroom</Option>
+          </Select>
+
           <Slider
-            min={1}
-            max={10}
+            min={0}
+            max={9}
             onChange={this.onChange}
           />
         </Col>

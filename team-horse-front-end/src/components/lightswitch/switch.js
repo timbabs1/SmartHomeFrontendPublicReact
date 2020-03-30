@@ -15,7 +15,7 @@ class LightSwitch extends React.Component {
       switch_digit: 1,
       bedroomLightStatus: 'Off',
       kitchenLightStatus: 'Off',
-      bathroomLightStatus: 'Off'
+      bathroomLightStatus: 'Off',
     }
   }
 
@@ -54,11 +54,11 @@ class LightSwitch extends React.Component {
     this.refWebSocket.sendMessage(message); //Sends over the websocket.
   }
 
-  handleSlider = (incValue) => {
+  handleSlider = (incValue, roomName) => {
   
     const message = {
       LightSetting: incValue,
-      Room: "Bedroom"
+      Room: roomName
     }
     this.sendMessage(JSON.stringify(message)) //Sends the message when a change occurs.
   }
@@ -87,12 +87,13 @@ onChange = () => {
   this.sendMessage(JSON.stringify(message)) //Sends the message when a change occurs.
 }
 
+
 render() {
   return (
     <div>
       <h1>Switch toggle for auto lights</h1>
       Status:
-      <Switch onChange={this.onChange} checkedChildren="1" unCheckedChildren="0" disabled={this.state.disabled} /> <br />
+      <Switch onChange={this.onChange} onSelect={this.onSelect} checkedChildren="1" unCheckedChildren="0" disabled={this.state.disabled} /> <br />
       <br />
       <br />
       <Button type="primary" onClick={this.toggle}>

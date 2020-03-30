@@ -28,20 +28,40 @@ class Alarm extends React.Component {
           activeKey: "1",
           show: false,
           withsilent: 'Off',
+          currentTime: '',
+          switchChecked: false,
         }
     }
 
-    carousel = React.createRef()
+    componentDidMount() {
+        this.interval = setInterval(() => this.setState({currentTime: moment().format('hh:mm:ss a')}), 1000)
+        if (this.state.currentactivationtime === this.state.currentTime) {
+            this.setState({alarmstate: "On"})
+        }
+        this.interval2 = setInterval( () => this.checkAlarmClock(), 1000)
+        /* this.interval = setInterval(() => this.setState({ time: Date.now() }), 1000); */
+    }
 
-    /* componentDidMount() {
-        console.log(this.carousel.current.value); // If this gives you ref object 
-    } */
+    componentWillUnmount () {
+        clearInterval(this.interval);
+    }
+
+    checkAlarmClock(){
+        if (this.state.currentactivationtime === this.state.currentTime) {
+            this.onChange()
+            console.log('Alarm activated')
+        } else if (this.state.currentdeactivationtime === this.state.currentTime) {
+            this.onChange()
+            console.log('Alarm deactivated')
+        }
+    }
+
 
     onChange = () => {
         if (this.state.alarmstate === "On" ) {
-            this.setState({alarmstate: "Off", statecolour: 'red'}) 
+            this.setState({alarmstate: "Off", statecolour: 'red', switchchecked : false}) 
         } else if (this.state.alarmstate === "Off" ) {
-            this.setState({alarmstate: "On", statecolour: 'green'})
+            this.setState({alarmstate: "On", statecolour: 'green', switchchecked : true})
         }
     }
     onChange4 = () => {
@@ -63,12 +83,10 @@ class Alarm extends React.Component {
     }
     
     onChange2 = (time, timeString) => {
-        console.log(time, timeString);
         this.setState({currentactivationtime: timeString})
     }
 
     onChange3 = (time, timeString) => {
-        console.log(time, timeString);
         this.setState({currentdeactivationtime: timeString})
     }
 
@@ -96,7 +114,7 @@ class Alarm extends React.Component {
                         <Card>
                             <Statistic title = "Current Alarm State" value={this.state.alarmstate} valueStyle={{ color: this.state.statecolour }} prefix={<FontAwesomeIcon icon={faBell} />} />
                             <p className="ant-statistic-title">Switch toggle to turn alarm on or off</p>
-                            <Switch  onChange={this.onChange} checkedChildren="On" unCheckedChildren="Off" disabled={this.state.disabled} />
+                            <Switch  onChange={this.onChange} checked={this.state.switchchecked} checkedChildren="On" unCheckedChildren="Off" disabled={this.state.disabled} />
                             <Statistic title = "Current Alarm Triggered State" value={this.state.alarmtriggered} valueStyle={{ color: this.state.triggeredcolour }} prefix={<FontAwesomeIcon icon={faBell} />} />
                             <p className="ant-statistic-title">Switch toggle to trigger alarm manually or deactivate manually</p>
                             <Switch  onChange={this.onChange4} checkedChildren="On" unCheckedChildren="Off" disabled={this.state.disabled} />
@@ -108,7 +126,7 @@ class Alarm extends React.Component {
                     <Col span={6}>
                         <Card>
                         <p className="ant-statistic-title">Set alarm activation time</p>
-                            <TimePicker onChange={this.onChange2} defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} open={this.state.open} onOpenChange={this.handleOpenChange} 
+                            <TimePicker use12Hours format="hh:mm:ss a" onChange={this.onChange2} defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} open={this.state.open} onOpenChange={this.handleOpenChange} 
                             addon={() => (
                                 <Button size="small" type="primary" onClick={this.handleClose}>
                                     Ok
@@ -117,7 +135,7 @@ class Alarm extends React.Component {
                         </Card>
                          <Card>
                             <p className="ant-statistic-title">Set alarm deactivation time</p>
-                            <TimePicker onChange={this.onChange3} defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} open2={this.state.open2} onOpenChange2={this.handleOpenChange2} 
+                            <TimePicker use12Hours format="hh:mm:ss a" onChange={this.onChange3} defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} open2={this.state.open2} onOpenChange2={this.handleOpenChange2} 
                             addon={() => (
                                 <Button size="small" type="primary" onClick={this.handleClose2}>
                                     Ok
@@ -134,6 +152,11 @@ class Alarm extends React.Component {
                             <Statistic title = "Current Alarm Dectivation time" value={this.state.currentdeactivationtime} valueStyle={{ color: 'red' }} prefix={<FontAwesomeIcon icon={faBell} />} />
                         </Card>
                     </Col>
+                    <Col span={6}>
+                        <Card>
+                            <Statistic title = "Current time" value={moment().format('MMMM Do YYYY, h:mm:ss a')} />
+                        </Card>
+                    </Col>
             </Row>
             <Row gutter={8}>
                 <Tabs defaultActiveKey="1" onChange={this.callback} activeKey= {this.state.activeKey}>
@@ -142,12 +165,12 @@ class Alarm extends React.Component {
                     <h3 className="ant-statistic-title">Alarm Deactivated</h3>
                     </div>
                     </TabPane>
-                    <TabPane tab={<span><Badge dot = {this.state.show}><NotificationOutlined /></Badge> Alarm Activated</span>} key="2">
+                    <TabPane tab={<span><Badge dot = {this.state.show}><NotificationOutlined /></Badge> Alarm Triggered</span>} key="2">
                     <div className = "slide2">
                     <h3 className="ant-statistic-title">Alarm Triggered!(Silent mode)</h3>
                     </div>
                     </TabPane>
-                    <TabPane tab={<span><Badge dot = {this.state.show}><NotificationOutlined /></Badge> Alarm Activated(Non-silent mode)</span>} key="3">
+                    <TabPane tab={<span><Badge dot = {this.state.show}><NotificationOutlined /></Badge> Alarm Triggered(Non-silent mode)</span>} key="3">
                     <div className = "slide3">
                     <h3 className="ant-statistic-title">Alarm Triggered!(Non Silent mode)</h3>
                     </div>

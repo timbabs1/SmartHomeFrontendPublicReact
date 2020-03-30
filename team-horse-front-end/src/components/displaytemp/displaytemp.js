@@ -19,26 +19,30 @@ class Displaytemp extends React.Component {
             targetTemperatureBedroom: 0,
             targetTemperatureKitchen: 0,
             targetTemperatureBathroom: 0,
-            changingTargetBedroomValue: 0,
-            changingTargetKitchenValue: 0,
-            changingTargetBathroomValue: 0,
+            targetToAchieveBedroom: 0, //Manual Entry
+            targetToAchieveKitchen: 0,
+            targetToAchieveBathroom: 0
         }
     }
+    componentDidMount() {
 
+    }
     sendMessage(message) {
-        this.refWebSocket.sendMessage(message); //Sends over the websocket.
+        console.log(message)
+        this.refWebSocket.sendMessage(message); //Sends over the websocket. 
+
     }
 
     handleData(data) {
-        let result = JSON.parse(data);
+        const result = JSON.parse(data);
         if ('currentState' in result) {
             this.setState({
-                currentTemperatureBedroom: result.currentState[0].Temperature,
+                currentTemperatureBedroom: result.currentState[0].Temperature, // Current Temp
                 currentTemperatureKitchen: result.currentState[1].Temperature,
                 currentTemperatureBathroom: result.currentState[2].Temperature,
-                targetTemperatureBedroom: result.currentState[0].Target_Temperature,
+                targetTemperatureBedroom: result.currentState[0].Target_Temperature, //From the current state being sent.
                 targetTemperatureKitchen: result.currentState[1].Target_Temperature,
-                targetTemperatureBathroom: result.currentState[2].Target_Temperature
+                targetTemperatureBathroom: result.currentState[2].Target_Temperature,
             })
         }
     }
@@ -50,28 +54,31 @@ class Displaytemp extends React.Component {
     handleClose() {
         console.log("disconnected")
     }
-    onChange = (value, Room) => {
-        let message = {}
-        if (Room === "Bedroom") { //Set new states for Room updated
-            this.setState({ targetTemperatureBedroom: value })
-            message = {
-                Target_Temperature: this.targetTemperatureBedroom,
-                Room: "Bedroom"
+    onChange = roomName => (e) => {
+        let targetValue = e.target.value
+        if (roomName === "Bedroom") { //Set new states for Room updated
+            this.setState({ targetTemperatureBedroom: targetValue })
+            console.log(this.state.targetTemperatureBedroom)
+            let message = {
+                Target_Temperature: targetValue,
+                Room: roomName
             }
-        } if (Room === "Kitchen") {
-            this.setState({ targetTemperatureKitchen: value })
-            message = {
-                Target_Temperature: this.state.targetTemperatureKitchen,
-                Room: "Kitchen"
+            this.sendMessage(JSON.stringify(message)) //Sends the message when a change occurs.
+        } if (roomName === "Kitchen") {
+            this.setState({ targetTemperatureKitchen: targetValue })
+            let message = {
+                Target_Temperature: targetValue,
+                Room: roomName
             }
-        } if (Room === "Bathroom") {
-            this.setState({ targetTemperatureBathroom: value })
-            message = {
-                Target_Temperature: this.state.targetTemperatureBathroom,
-                Room: "Bathroom"
+            this.sendMessage(JSON.stringify(message)) //Sends the message when a change occurs.
+        } else if (roomName === "Bathroom") {
+            this.setState({ targetTemperatureBathroom: targetValue })
+            let message = {
+                Target_Temperature: targetValue,
+                Room: roomName
             }
+            this.sendMessage(JSON.stringify(message)) //Sends the message when a change occurs.
         }
-        this.sendMessage(JSON.stringify(message)) //Sends the message when a change occurs.
     }
 
     render() {
@@ -88,7 +95,7 @@ class Displaytemp extends React.Component {
                         <Card>
                             <Statistic title="Target Temperature" value={this.state.targetTemperatureBedroom} valueStyle={{ color: '#3f8600' }} prefix={<FontAwesomeIcon icon={faThermometer} />} />
                             <p className="ant-statistic-title">Input new target temperature below in degree celsius (°)</p>
-                            <InputNumber min={-40} max={50} defaultValue={3} /*onChange={this.onChange("Bedroom")}*/ />
+                            <InputNumber min={-40} max={50} defaultvalue={this.state.targetTemperatureBedroom} onPressEnter={this.onChange("Bedroom")} />
                         </Card>
                         <Card>
                             <p className="ant-statistic-title">Select day and night temperature setting below</p>
@@ -106,7 +113,7 @@ class Displaytemp extends React.Component {
                         <Card>
                             <Statistic title="Target Temperature" value={this.state.targetTemperatureKitchen} valueStyle={{ color: '#3f8600' }} prefix={<FontAwesomeIcon icon={faThermometer} />} />
                             <p className="ant-statistic-title">Input new target temperature below in degree celsius (°)</p>
-                            <InputNumber min={-40} max={50} defaultValue={3} /*onChange={this.onChange("Kitchen")}*/ />
+                            <InputNumber id="Kitchen" min={-40} max={50} defaultValue={this.state.targetTemperatureKitchen} /*onChange={this.onChange("Kitchen")}*/ />
                         </Card>
                         <Card>
                             <p className="ant-statistic-title">Select day and night temperature setting below</p>
@@ -124,7 +131,7 @@ class Displaytemp extends React.Component {
                         <Card>
                             <Statistic title="Target Temperature" value={this.state.targetTemperatureBathroom} valueStyle={{ color: '#3f8600' }} prefix={<FontAwesomeIcon icon={faThermometer} />} />
                             <p className="ant-statistic-title">Input new target temperature below in degree celsius (°)</p>
-                            <InputNumber min={-40} max={50} defaultValue={3} /*onChange={this.onChange("Bathroom")}*/ />
+                            <InputNumber id="Bathroom" min={-40} max={50} defaultValue={this.state.targetTemperatureBathroom} /*onChange={this.onChange("Bathroom")}*/ />
                         </Card>
                         <Card>
                             <p className="ant-statistic-title">Select day and night temperature setting below</p>
@@ -136,7 +143,7 @@ class Displaytemp extends React.Component {
                 <Websocket url='ws://localhost:8000/requesttemp' onMessage={this.handleData.bind(this)}
                     onOpen={this.handleOpen} onClose={this.handleClose}
                     reconnect={true} debug={true}
-                    ref={Websocket => {this.refWebSocket = Websocket;}} />
+                    ref={Websocket => { this.refWebSocket = Websocket; }} />
             </div>
         )
     }

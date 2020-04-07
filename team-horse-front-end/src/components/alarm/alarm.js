@@ -1,11 +1,13 @@
 import React from 'react';
 
-import { Badge, Button, Row, Col, Card, Statistic, Switch, Carousel, TimePicker, Tabs  } from 'antd';
+import { Badge, Button, Row, Col, Card, Statistic, Switch, Carousel, TimePicker, Tabs, Alert  } from 'antd';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell } from '@fortawesome/free-solid-svg-icons'
 import moment from 'moment'
 import { NotificationOutlined } from '@ant-design/icons';
+
+import Websocket from 'react-websocket';
 
 import './alarm.css';
 
@@ -17,6 +19,7 @@ class Alarm extends React.Component {
 
         this.state = {
           alarmstate: "Off",
+          alarmDigitState: 0,
           statecolour: 'red',
           open: false,
           open2: false,
@@ -38,7 +41,7 @@ class Alarm extends React.Component {
         if (this.state.currentactivationtime === this.state.currentTime) {
             this.setState({alarmstate: "On"})
         }
-        this.interval2 = setInterval( () => this.checkAlarmClock(), 1000)
+        /* this.interval2 = setInterval( () => this.checkAlarmClock(), 1000) */
         /* this.interval = setInterval(() => this.setState({ time: Date.now() }), 1000); */
     }
 
@@ -56,13 +59,58 @@ class Alarm extends React.Component {
         }
     }
 
+    handleData(data) { //This is the incoming data from the websocket connection.
+        const result = JSON.parse(data);
+        console.log(result)
+        if ('currentState' in result) {
+            let a = Object.values(result.autoOnTime)
+            this.setState({
+                /* alarmDigitState : result.currentState[0].AlarmActivationState, */
+                currentactivationtime : result.autoOnTime,
+                currentdeactivationtime : result.autoOffTime,
+            })
+        }
+        /* const result = JSON.parse(data);
+        if ('currentState' in result) {
+            this.setState({
+                currentTemperatureBedroom: result.currentState[0].Temperature, // Current Temp
+                currentTemperatureKitchen: result.currentState[1].Temperature,
+                currentTemperatureBathroom: result.currentState[2].Temperature,
+                targetTemperatureBedroom: result.currentState[0].Target_Temperature, //From the current state being sent.
+                targetTemperatureKitchen: result.currentState[1].Target_Temperature,
+                targetTemperatureBathroom: result.currentState[2].Target_Temperature,
+            })
+        } */
+    }
 
     onChange = () => {
-        if (this.state.alarmstate === "On" ) {
-            this.setState({alarmstate: "Off", statecolour: 'red', switchchecked : false}) 
-        } else if (this.state.alarmstate === "Off" ) {
-            this.setState({alarmstate: "On", statecolour: 'green', switchchecked : true})
-        }
+        if (this.state.alarmstate === "On" && this.state.alarmDigitState === 1) {
+            this.setState({alarmstate: "Off",  alarmDigitState: 0, statecolour: 'red', switchchecked : false}) 
+            //Set new states for Room updated
+            let message = {
+                AlarmActivationState: 0,
+                autoOnTime: this.state.currentactivationtime,
+                autoOffTime: this.state.currentdeactivationtime,
+            }
+            console.log(message.autoOnTime)
+            this.sendMessage(JSON.stringify(message)) //Sends the message when a change occurs.
+        } else if (this.state.alarmstate === "Off" && this.state.alarmDigitState === 0 ) {
+            this.setState({alarmstate: "On", alarmDigitState: 1, statecolour: 'green', switchchecked : true})
+            //Set new states for Room updated
+            let message = {
+                AlarmActivationState: 1,
+                autoOnTime: this.state.currentactivationtime,
+                autoOffTime: this.state.currentdeactivationtime,
+            }
+            console.log(message.AlarmActivationState)
+            this.sendMessage(JSON.stringify(message)) //Sends the message when a change occurs.
+            }
+    }
+
+    sendMessage(message) {
+        console.log(message)
+        this.refWebSocket.sendMessage(message); //Sends over the websocket. 
+
     }
     onChange4 = () => {
         if (this.state.alarmtriggered === "On" ) {
@@ -90,7 +138,7 @@ class Alarm extends React.Component {
         this.setState({currentdeactivationtime: timeString})
     }
 
-    handleClose = () => this.setState({ open: false });
+    handleClose1 = () => this.setState({ open: false });
 
     handleClose2 = () => this.setState({ open: false });
 
@@ -104,6 +152,14 @@ class Alarm extends React.Component {
 
     callback = (key)  => {
         console.log(key);
+    }
+
+    handleOpen() {
+        console.log("Connected")
+    }
+
+    handleClose() {
+        console.log("disconnected")
     }
 
   render() {
@@ -128,7 +184,7 @@ class Alarm extends React.Component {
                         <p className="ant-statistic-title">Set alarm activation time</p>
                             <TimePicker use12Hours format="hh:mm:ss a" onChange={this.onChange2} defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} open={this.state.open} onOpenChange={this.handleOpenChange} 
                             addon={() => (
-                                <Button size="small" type="primary" onClick={this.handleClose}>
+                                <Button size="small" type="primary" onClick={this.handleClose1}>
                                     Ok
                                 </Button>
                                 )} />
@@ -177,6 +233,11 @@ class Alarm extends React.Component {
                     </TabPane>
                 </Tabs>
             </Row>
+
+            <Websocket url='ws://localhost:8000/requestalarm' onMessage={this.handleData.bind(this)}
+                    onOpen={this.handleOpen} onClose={this.handleClose}
+                    reconnect={true} debug={true}
+                    ref={Websocket => { this.refWebSocket = Websocket; }} />
         </div>
     )
   }

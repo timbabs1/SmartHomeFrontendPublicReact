@@ -18,10 +18,9 @@ class Nav extends React.Component {
       current: e.key,
     });
     this.props.changeView({
-      currentMenu: this.state.current,
+      currentMenu: e.key,
     })
     console.log(this.state.current)
-
   };
 
   render() {
@@ -57,6 +56,10 @@ class Nav extends React.Component {
           <Icon type="windows" />
             Windows
           </a>
+        </Menu.Item>
+        <Menu.Item key="alarmswitch">
+          <Icon type="bulb" />
+          Alarm switch
         </Menu.Item>
       </Menu>
     );
